@@ -59,6 +59,16 @@ $cl_total = count($checklist);
           <span class="bdot"></span><?php echo $badge_label; ?>
         </span>
 
+        <?php if (!empty($wo['assigned_to_name'])): ?>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium"
+                style="background:var(--tech-gray-100);color:var(--tech-gray-600);">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM9 19c-4.3-1.4-6-3.1-6-6"/>
+            </svg>
+            Assigned: <?php echo htmlspecialchars($wo['assigned_to_name']); ?>
+          </span>
+        <?php endif; ?>
+
         <?php if (empty($can_edit)): ?>
           <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold"
                 style="background:var(--tech-gray-100);color:var(--tech-gray-500);">
