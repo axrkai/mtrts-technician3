@@ -56,7 +56,7 @@ $cl_total = count($checklist);
         <?php endif; ?>
 
         <?php if ($status !== 'assigned'): ?>
-          <span id="woStatusBadge" class="wo-badge badge-<?php echo $status; ?>">
+          <span id="woStatusBadge" class="wo-badge <?php echo $badge_cls; ?>">
             <span class="bdot"></span><?php echo $badge_label; ?>
           </span>
         <?php endif; ?>
@@ -557,7 +557,7 @@ $cl_total = count($checklist);
     </div>
   </div>
 
-  <!-- ── Evidence (Documentation) ─────────────────���─────────── -->
+  <!-- ─��� Evidence (Documentation) ─────────────────���─────────── -->
   <div class="p-6 hidden" id="tab-evidence">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 
@@ -657,7 +657,7 @@ $cl_total = count($checklist);
     </div>
   </div>
 
-  <!-- ── Sign-off (Documentation) ────────────────────────────── -->
+  <!-- ── Sign-off (Documentation) ─────────────────────────────�� -->
   <div class="p-6 hidden" id="tab-signoff">
 
     <!-- Validation blocker -->
