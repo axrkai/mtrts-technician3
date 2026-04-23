@@ -47,24 +47,19 @@ $cl_total = count($checklist);
 
         <?php if (!empty($wo['assigned_to_name'])): ?>
           <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium"
-                style="background:var(--tech-gray-100);color:var(--tech-gray-700);">
+                style="background:var(--tech-blue-lt);color:var(--tech-blue);">
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM9 19c-4.3-1.4-6-3.1-6-6"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
             </svg>
-            Assigned: <?php echo htmlspecialchars($wo['assigned_to_name']); ?>
+            <?php echo htmlspecialchars($wo['assigned_to_name']); ?>
           </span>
         <?php endif; ?>
 
-        <?php 
-          $status_style = '';
-          if ($status === 'in_progress') {
-            $status_style = 'background:rgba(59, 130, 246, 0.1);color:#2563eb;border:1px solid rgba(59, 130, 246, 0.2);';
-          }
-        ?>
-        <span id="woStatusBadge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium"
-              style="<?php echo $status_style; ?>">
-          <span class="bdot" style="background:currentColor;"></span><?php echo $badge_label; ?>
-        </span>
+        <?php if ($status !== 'assigned'): ?>
+          <span id="woStatusBadge" class="wo-badge badge-<?php echo str_replace('_', '-', $status); ?>">
+            <span class="bdot"></span><?php echo $badge_label; ?>
+          </span>
+        <?php endif; ?>
 
         <?php if (empty($can_edit)): ?>
           <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold"
@@ -562,7 +557,7 @@ $cl_total = count($checklist);
     </div>
   </div>
 
-  <!-- ── Evidence (Documentation) ───────────────────────────── -->
+  <!-- ── Evidence (Documentation) ─────────────────���─────────── -->
   <div class="p-6 hidden" id="tab-evidence">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 
