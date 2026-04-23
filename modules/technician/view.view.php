@@ -56,7 +56,7 @@ $cl_total = count($checklist);
         <?php endif; ?>
 
         <?php if ($status !== 'assigned'): ?>
-          <span id="woStatusBadge" class="wo-badge badge-<?php echo str_replace('_', '-', $status); ?>">
+          <span id="woStatusBadge" class="wo-badge badge-<?php echo $status; ?>">
             <span class="bdot"></span><?php echo $badge_label; ?>
           </span>
         <?php endif; ?>
@@ -75,11 +75,11 @@ $cl_total = count($checklist);
           <button type="button"
                   id="startWorkBtn"
                   onclick="startWork(<?php echo (int)($wo['wo_id'] ?? 0); ?>, this)"
-                  class="inline-flex items-center gap-1.5 text-white text-sm font-semibold px-3 py-1.5 rounded-lg transition-colors"
+                  class="inline-flex items-center gap-1 text-white text-xs font-semibold px-2.5 py-1 rounded-md transition-colors"
                   style="background:var(--tech-green);"
                   onmouseover="this.style.background='var(--tech-green-dk)'"
                   onmouseout="this.style.background='var(--tech-green)'">
-            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z"/>
             </svg>
             Start Work
