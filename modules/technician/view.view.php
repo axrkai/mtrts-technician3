@@ -975,42 +975,155 @@ function switchTab(key, btn) {
 }
 
 /* ── Start Work ──────────────────────────────────────────── */
-function startWork(woId, button) {
-  if (!confirm('Start work on this job? This will change the status to "In Progress".')) return;
-  button.disabled = true;
-  button.textContent = 'Starting…';
+function showConfirmModal(title, message, onConfirm) {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.style.cssText = `
+    position:fixed;top:0;left:0;right:0;bottom:0;
+    background:rgba(0,0,0,0.5);
+    display:flex;align-items:center;justify-content:center;
+    z-index:1000;
+  `;
 
-  fetch('<?php echo BASE_URL; ?>modules/technician/sync.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: 'action=start_work&wo_id=' + woId
-  })
-  .then(r => r.json())
-  .then(data => {
-    if (data.success) {
-      const badge = document.getElementById('woStatusBadge');
-      if (badge) {
-        badge.className = 'wo-badge badge-in_progress';
-        badge.innerHTML = '<span class="bdot"></span>In Progress';
-      }
-      button.remove();
-      const msg = document.createElement('div');
-      msg.className = 'text-sm font-medium px-3 py-2 rounded-lg mb-4';
-      msg.style.cssText = 'background:var(--tech-green-lt);color:var(--tech-green-dk);border:1px solid var(--tech-green-bd);';
-      msg.textContent = 'Work started successfully!';
-      badge.parentElement.parentElement.prepend(msg);
-      setTimeout(() => msg.remove(), 3000);
-    } else {
-      alert(data.message || 'Failed to start work');
-      button.disabled = false;
-      button.textContent = 'Start Work';
+  const modal = document.createElement('div');
+  modal.className = 'modal-dialog';
+  modal.style.cssText = `
+    background:white;border-radius:12px;padding:24px;
+    max-width:400px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,0.2);
+    animation:slideUp 0.3s ease-out;
+  `;
+
+  const titleEl = document.createElement('h3');
+  titleEl.style.cssText = 'margin:0 0 12px 0;font-size:16px;font-weight:600;color:var(--tech-gray-900);';
+  titleEl.textContent = title;
+
+  const msgEl = document.createElement('p');
+  msgEl.style.cssText = 'margin:0 0 24px 0;font-size:14px;color:var(--tech-gray-700);line-height:1.5;';
+  msgEl.textContent = message;
+
+  const btnGroup = document.createElement('div');
+  btnGroup.style.cssText = 'display:flex;gap:12px;justify-content:flex-end;';
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.style.cssText = `
+    padding:8px 16px;border:1px solid var(--tech-gray-200);
+    border-radius:6px;background:white;color:var(--tech-gray-700);
+    font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;
+  `;
+  cancelBtn.onmouseover = () => cancelBtn.style.background = 'var(--tech-gray-50)';
+  cancelBtn.onmouseout = () => cancelBtn.style.background = 'white';
+
+  const confirmBtn = document.createElement('button');
+  confirmBtn.textContent = 'Confirm';
+  confirmBtn.style.cssText = `
+    padding:8px 16px;border:none;border-radius:6px;
+    background:var(--tech-green);color:white;
+    font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;
+  `;
+  confirmBtn.onmouseover = () => confirmBtn.style.background = 'var(--tech-green-dk)';
+  confirmBtn.onmouseout = () => confirmBtn.style.background = 'var(--tech-green)';
+
+  cancelBtn.onclick = () => overlay.remove();
+  confirmBtn.onclick = () => {
+    overlay.remove();
+    onConfirm();
+  };
+
+  btnGroup.appendChild(cancelBtn);
+  btnGroup.appendChild(confirmBtn);
+  modal.appendChild(titleEl);
+  modal.appendChild(msgEl);
+  modal.appendChild(btnGroup);
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function showAlertModal(title, message) {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.style.cssText = `
+    position:fixed;top:0;left:0;right:0;bottom:0;
+    background:rgba(0,0,0,0.5);
+    display:flex;align-items:center;justify-content:center;
+    z-index:1000;
+  `;
+
+  const modal = document.createElement('div');
+  modal.className = 'modal-dialog';
+  modal.style.cssText = `
+    background:white;border-radius:12px;padding:24px;
+    max-width:400px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,0.2);
+    animation:slideUp 0.3s ease-out;
+  `;
+
+  const titleEl = document.createElement('h3');
+  titleEl.style.cssText = 'margin:0 0 12px 0;font-size:16px;font-weight:600;color:var(--tech-gray-900);';
+  titleEl.textContent = title;
+
+  const msgEl = document.createElement('p');
+  msgEl.style.cssText = 'margin:0 0 20px 0;font-size:14px;color:var(--tech-gray-700);line-height:1.5;';
+  msgEl.textContent = message;
+
+  const okBtn = document.createElement('button');
+  okBtn.textContent = 'OK';
+  okBtn.style.cssText = `
+    width:100%;padding:10px;border:none;border-radius:6px;
+    background:var(--tech-green);color:white;
+    font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;
+  `;
+  okBtn.onmouseover = () => okBtn.style.background = 'var(--tech-green-dk)';
+  okBtn.onmouseout = () => okBtn.style.background = 'var(--tech-green)';
+  okBtn.onclick = () => overlay.remove();
+
+  modal.appendChild(titleEl);
+  modal.appendChild(msgEl);
+  modal.appendChild(okBtn);
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function startWork(woId, button) {
+  showConfirmModal(
+    'Start Work',
+    'Start work on this job? This will change the status to "In Progress".',
+    () => {
+      button.disabled = true;
+      button.textContent = 'Starting…';
+
+      fetch('<?php echo BASE_URL; ?>modules/technician/sync.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'action=start_work&wo_id=' + woId
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          const badge = document.getElementById('woStatusBadge');
+          if (badge) {
+            badge.className = 'wo-badge badge-in_progress';
+            badge.innerHTML = '<span class="bdot"></span>In Progress';
+          }
+          button.remove();
+          const msg = document.createElement('div');
+          msg.className = 'text-sm font-medium px-3 py-2 rounded-lg mb-4';
+          msg.style.cssText = 'background:var(--tech-green-lt);color:var(--tech-green-dk);border:1px solid var(--tech-green-bd);';
+          msg.textContent = 'Work started successfully!';
+          badge.parentElement.parentElement.prepend(msg);
+          setTimeout(() => msg.remove(), 3000);
+        } else {
+          showAlertModal('Error', data.message || 'Failed to start work');
+          button.disabled = false;
+          button.textContent = 'Start Work';
+        }
+      })
+      .catch(() => {
+        showAlertModal('Error', 'Network error while starting work');
+        button.disabled = false;
+        button.textContent = 'Start Work';
+      });
     }
-  })
-  .catch(() => {
-    alert('Network error while starting work');
-    button.disabled = false;
-    button.textContent = 'Start Work';
-  });
+  );
 }
 
 /* ── Satisfaction stars ──────────────────────────────────── */

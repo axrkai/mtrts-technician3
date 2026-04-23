@@ -697,4 +697,29 @@ select.fin:focus {
 .job-loc        { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--tech-gray-500); flex-wrap: wrap; }
 .job-loc-dot    { width: 4px; height: 4px; border-radius: 50%; background: var(--tech-gray-300); display: inline-block; }
 .claim-badge    { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--tech-gray-100); color: var(--tech-gray-500); font-size: 11.5px; font-weight: 700; }
+
+/* ── Modal dialogs ───────────────────────────────────────────── */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-overlay {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-dialog {
+  font-family: var(--tech-sans);
+}
 </style>
