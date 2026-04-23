@@ -45,29 +45,26 @@ $cl_total = count($checklist);
       <div class="flex items-center gap-2 flex-wrap mb-2">
         <span class="vf-mono"><?php echo htmlspecialchars($wo['wo_number']); ?></span>
 
-        <?php if ($status === 'assigned' && !empty($can_edit)): ?>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold"
-                style="background:rgba(34, 197, 94, 0.1);color:#16a34a;border:1px solid rgba(34, 197, 94, 0.2);">
-            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2.25 2.25L15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            Assigned to you
-          </span>
-        <?php endif; ?>
-
-        <span id="woStatusBadge" class="wo-badge <?php echo $badge_cls; ?>">
-          <span class="bdot"></span><?php echo $badge_label; ?>
-        </span>
-
         <?php if (!empty($wo['assigned_to_name'])): ?>
           <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium"
-                style="background:var(--tech-gray-100);color:var(--tech-gray-600);">
+                style="background:var(--tech-gray-100);color:var(--tech-gray-700);">
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM9 19c-4.3-1.4-6-3.1-6-6"/>
             </svg>
             Assigned: <?php echo htmlspecialchars($wo['assigned_to_name']); ?>
           </span>
         <?php endif; ?>
+
+        <?php 
+          $status_style = '';
+          if ($status === 'in_progress') {
+            $status_style = 'background:rgba(59, 130, 246, 0.1);color:#2563eb;border:1px solid rgba(59, 130, 246, 0.2);';
+          }
+        ?>
+        <span id="woStatusBadge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium"
+              style="<?php echo $status_style; ?>">
+          <span class="bdot" style="background:currentColor;"></span><?php echo $badge_label; ?>
+        </span>
 
         <?php if (empty($can_edit)): ?>
           <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold"
@@ -167,20 +164,7 @@ $cl_total = count($checklist);
     </div>
   </div>
 
-  <!-- Second row: Assigned Technician -->
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-0 mt-4 pt-4"
-       style="border-top:1px solid var(--tech-gray-100);">
-    <div class="pr-4 md:pr-0 md:pl-0" style="border-right:1px solid var(--tech-gray-100);">
-      <div class="vf-lbl">Assigned Technician</div>
-      <div class="vf-val text-sm">
-        <?php if ($wo['assigned_to_name'] ?? null): ?>
-          <?php echo htmlspecialchars($wo['assigned_to_name']); ?>
-        <?php else: ?>
-          <span class="vf-empty">Unassigned</span>
-        <?php endif; ?>
-      </div>
-    </div>
-  </div>
+
 
 
 
